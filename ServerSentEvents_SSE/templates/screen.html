@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anlık Döviz Kurları</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .fiyat_karti {
+            background-color: gray;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        
+        .fiyat_karti h3 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="durum-alani">Durum: </div>
+        <div id="x-lira" class="fiyat_karti">
+            <h3>1 X-Lira: <div id="rate-with-arrow-x">
+                <span id="fiyat-x">1.00</span>
+                <span id="arrow-x">-</span>
+            </div></h3>
+            <p>1 X-Lira sizin <span id="fiyat-siz-x">1.00</span> Liranıza eşit</p>
+        </div>
+        <div id="y-lira" class="fiyat_karti">
+            <h3>1 Y-Lira <div id="rate-with-arrow-y">
+                <span id="fiyat-y">1.05</span>
+                <span id="arrow-y">-</span>
+            </div></h3>
+            <p>1 Y-Lira sizin <span id="fiyat-siz-y">1.05</span> Liranıza eşit</p>
+        </div>
+        <div id="z-lira" class="fiyat_karti">
+            <h3>1 Z-Lira <div id="rate-with-arrow-z">
+                <span id="fiyat-z">1.23</span>
+                <span id="arrow-z">-</span>
+            </div></h3>
+            <p>1 Z-Lira sizin <span id="fiyat-siz-z">1.23</span> Liranıza eşit</p>
+        </div>
+        <button type="button" onclick="sonlandir()">Sonlandır</button>
+    </div>
+
+    <script>
+        var eventSource = new EventSource("/dinle/");
+    
+        eventSource.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+    
+            document.getElementById("fiyat-x").textContent = data.x_lira;
+            document.getElementById("fiyat-siz-x").textContent = data.x_lira;
+            document.getElementById("arrow-x").textContent = data.arrow_x;
+            if (data.arrow_x === "↑") {
+                document.getElementById("x-lira").style.backgroundColor = "lightgreen";
+            } else {
+                document.getElementById("x-lira").style.backgroundColor = "lightcoral";
+            }
+
+            document.getElementById("fiyat-y").textContent = data.y_lira;
+            document.getElementById("fiyat-siz-y").textContent = data.y_lira;
+            document.getElementById("arrow-y").textContent = data.arrow_y;
+            if (data.arrow_y === "↑") {
+                document.getElementById("y-lira").style.backgroundColor = "lightgreen";
+            } else {
+                document.getElementById("y-lira").style.backgroundColor = "lightcoral";
+            }
+
+            document.getElementById("fiyat-z").textContent = data.z_lira;
+            document.getElementById("fiyat-siz-z").textContent = data.z_lira;
+            document.getElementById("arrow-z").textContent = data.arrow_z;
+            if (data.arrow_z === "↑") {
+                document.getElementById("z-lira").style.backgroundColor = "lightgreen";
+            } else {
+                document.getElementById("z-lira").style.backgroundColor = "lightcoral";
+            }
+        };
+
+        eventSource.onopen = function(event) {
+            console.log('Bağlantı oluştu.');
+            document.getElementById('durum-alani').innerText = 'Durum: Bağlantı oluştu';
+        };
+
+        eventSource.onerror = function(event) {
+            console.error('Hata var.', event);
+            document.getElementById('durum-alani').innerText = 'Durum: Hata var';
+        };
+        
+        function sonlandir() {
+            eventSource.close();
+        }
+    </script>
+</body>
+</html>
