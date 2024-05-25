@@ -36,34 +36,34 @@
 <body>
     <div id="container">
         <div id="durum-alani">Durum: </div>
-        <div id="x-lira" class="fiyat_karti">
+        <div id="x-lira" class="fiyat_karti"> <!-- This div tag is for the information card of our virtual currency -->
             <h3>1 X-Lira: <div id="rate-with-arrow-x">
                 <span id="fiyat-x">1.00</span>
                 <span id="arrow-x">-</span>
             </div></h3>
             <p>1 X-Lira sizin <span id="fiyat-siz-x">1.00</span> Liranıza eşit</p>
         </div>
-        <div id="y-lira" class="fiyat_karti">
+        <div id="y-lira" class="fiyat_karti"> <!-- This div tag is for the information card of our virtual currency -->
             <h3>1 Y-Lira <div id="rate-with-arrow-y">
                 <span id="fiyat-y">1.05</span>
                 <span id="arrow-y">-</span>
             </div></h3>
             <p>1 Y-Lira sizin <span id="fiyat-siz-y">1.05</span> Liranıza eşit</p>
         </div>
-        <div id="z-lira" class="fiyat_karti">
+        <div id="z-lira" class="fiyat_karti"> <!-- This div tag is for the information card of our virtual currency -->
             <h3>1 Z-Lira <div id="rate-with-arrow-z">
                 <span id="fiyat-z">1.23</span>
                 <span id="arrow-z">-</span>
             </div></h3>
             <p>1 Z-Lira sizin <span id="fiyat-siz-z">1.23</span> Liranıza eşit</p>
         </div>
-        <button type="button" onclick="sonlandir()">Sonlandır</button>
+        <button type="button" onclick="sonlandir()">Sonlandır</button> <!-- This button calls the function that finishes taking real-time data -->
     </div>
 
     <script>
-        var eventSource = new EventSource("/dinle/");
+        var eventSource = new EventSource("/dinle/"); // If we want listens real-time data firstly we create EventSource object
     
-        eventSource.onmessage = function(event) {
+        eventSource.onmessage = function(event) { // Then we process the incoming data using the onmessage attribute
             var data = JSON.parse(event.data);
     
             document.getElementById("fiyat-x").textContent = data.x_lira;
@@ -94,12 +94,12 @@
             }
         };
 
-        eventSource.onopen = function(event) {
+        eventSource.onopen = function(event) { // This is another attribute for EventSource . This attribute controls connection between server and client
             console.log('Bağlantı oluştu.');
             document.getElementById('durum-alani').innerText = 'Durum: Bağlantı oluştu';
         };
 
-        eventSource.onerror = function(event) {
+        eventSource.onerror = function(event) { // This attribute controls connection errors between server and client
             console.error('Hata var.', event);
             document.getElementById('durum-alani').innerText = 'Durum: Hata var';
         };
